@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaizen Shop | Discord Architecture & Systems Specialist</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200;400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #a855f7;
+            --primary-glow: #6b21a8;
+            --bg-deep: #050208;
+            --card-bg: rgba(20, 10, 30, 0.7);
+            --text-main: #f3f4f6;
+            --text-dim: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Kanit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #050208 100%);
+        }
+
+        /* เอฟเฟกต์พื้นหลังขยับได้ */
+        .bg-animate {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .circle {
+            position: absolute;
+            background: var(--primary);
+            filter: blur(100px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%); }
+            to { transform: translate(20%, 20%); }
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        /* Header Section */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .shop-logo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--primary);
+            box-shadow: 0 0 30px var(--primary-glow);
+            margin-bottom: 20px;
+            object-fit: cover;
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 20px var(--primary-glow); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px var(--primary); }
+            100% { transform: scale(1); box-shadow: 0 0 20px var(--primary-glow); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            letter-spacing: 5px;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .tagline {
+            color: var(--primary);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            font-weight: 200;
+        }
+
+        /* Service Grid */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+
+        .price-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            padding: 30px;
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s both;
+        }
+
+        .price-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .price-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .price-card .price {
+            font-size: 2.2rem;
+            color: var(--primary);
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .price-card .currency {
+            font-size: 1rem;
+            color: var(--text-dim);
+            margin-left: 5px;
+        }
+
+        /* Detail Section */
+        .info-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 25px;
+            padding: 40px;
+            border: 1px dashed var(--primary-glow);
+            margin-top: 40px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .info-item h4 {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-item h4::before {
+            content: '●';
+            margin-right: 10px;
+            font-size: 0.8rem;
+        }
+
+        .info-item p {
+            color: var(--text-dim);
+            line-height: 1.8;
+        }
+
+        /* Footer & Contact */
+        .footer {
+            text-align: center;
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(168, 85, 247, 0.1);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            box-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 30px;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px var(--primary);
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            font-size: 1.1rem;
+        }
+
+        .contact-item b { color: var(--primary); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .info-grid { grid-template-columns: 1fr; }
+            .contact-info { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animate">
+        <div class="circle" style="width: 400px; height: 400px; top: 10%; left: -5%;"></div>
+        <div class="circle" style="width: 500px; height: 500px; bottom: 10%; right: -5%; background: #4c1d95;"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <img src="80_20260504105603.jpg" alt="Kaizen Shop Logo" class="shop-logo">
+            <h1>KAIZEN SHOP</h1>
+            <p class="tagline">ยินดีต้อนรับเข้าสู้ร้านไคเซ็น</p>
+            <p style="margin-top: 15px; opacity: 0.8;">"ได้งานภายในวันที่สั่งทุกคิว"</p>
+        </header>
+
+        <div class="grid">
+            <div class="price-card" style="animation-delay: 0.1s;">
+                <h3>ดิสไม่มีระบบ</h3>
+                <p class="price">10<span class="currency">฿+</span></p>
+                <p style="font-size: 0.8rem; color: var(--text-dim); mt-2">(ห้องเปล่าๆ)</p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.2s;">
+                <h3>ดิสส่วนตัว</h3>
+                <p class="price">89<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.3s;">
+                <h3>ดิสกิลล์ / ดิสแคลน</h3>
+                <p class="price">109<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.4s;">
+                <h3>ดิสแก๊ง</h3>
+                <p class="price">109<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.5s;">
+                <h3>ดิสร้านค้า</h3>
+                <p class="price">159<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.6s;">
+                <h3>ดิสสตรีมเมอร์</h3>
+                <p class="price">199<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.7s;">
+                <h3>ดิสคอมมูนิตี้</h3>
+                <p class="price">299<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.8s;">
+                <h3>ดิสประเทศ</h3>
+                <p class="price">399<span class="currency">฿</span></p>
+            </div>
+            <div class="price-card" style="animation-delay: 0.9s; border: 1px solid var(--primary);">
+                <div style="position: absolute; top: 10px; right: 15px; font-size: 0.7rem; background: var(--primary); padding: 2px 8px; border-radius: 10px;">RECOMMENDED</div>
+                <h3>แนวโรลเพลย์</h3>
+                <p class="price">699<span class="currency">฿</span></p>
+                <p style="font-size: 0.8rem; color: var(--text-dim);">(ห้อง/ระบบเยอะมาก)</p>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-grid">
+                <div class="info-item">
+                    <h4>Tailor-Made Design</h4>
+                    <p>สามารถบรีฟได้ตามสบาย พกบรีฟมาหรือใช้แบบที่ทางร้านเคยทำได้ เพื่อให้ได้เซิร์ฟเวอร์ที่ตรงใจคุณที่สุด</p>
+                </div>
+                <div class="info-item">
+                    <h4>Revision Policy</h4>
+                    <p>หากงานเสร็จแล้วแต่อยากแก้นอกเหนือจากบรีฟ หรือลูกค้าบรีฟไม่ชัดเจน ทางร้านขออนุญาตคิดตามสัดส่วนราคางานจริง</p>
+                </div>
+                <div class="info-item">
+                    <h4>Refund Policy</h4>
+                    <p>หากเริ่มงานแล้วไม่คืนเงินทุกกรณี หากยกเลิกงานตอนยังไม่เริ่มงาน ทางร้านคืนเงินให้ 50% ของยอดชำระ</p>
+                </div>
+                <div class="info-item">
+                    <h4>Custom Pricing</h4>
+                    <p>ราคาเริ่มต้นอาจมีการเปลี่ยนแปลง ขึ้นอยู่กับระบบที่ใช้ จำนวนห้อง และความละเอียดในการตกแต่ง</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <a href="https://discord.gg/Q589MD6d33" class="cta-button" target="_blank">สั่งซื้อ / สอบถามคลิกที่นี่</a>
+            <div class="contact-info">
+                <div class="contact-item"><b>Facebook:</b> 카이젠</div>
+                <div class="contact-item"><b>Discord:</b> ac._.ac</div>
+            </div>
+            <p style="margin-top: 30px; color: var(--text-dim); font-size: 0.9rem;">
+                ดูผลงานเพิ่มเติม: <a href="https://drive.google.com/drive/folders/187AelMeeOfsdvWFpSHq8QxwIPsw7Kmzd?usp=drive_link" style="color: var(--primary);">Google Drive Portfolio</a>
+            </p>
+            <p style="margin-top: 20px; font-style: italic; color: var(--primary);">"งบไม่พอลดได้แต่ไม่กดเกินนะคะ"</p>
+        </footer>
+    </div>
+
+    <script>
+        // เพิ่มลูกเล่นเมื่อเลื่อนหน้าจอ (Scroll Reveal)
+        window.addEventListener('scroll', () => {
+            const cards = document.querySelectorAll('.price-card');
+            cards.forEach(card => {
+                const cardTop = card.getBoundingClientRect().top;
+                if(cardTop < window.innerHeight - 50) {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
